@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import muisti.Peli.Press.Viive;
@@ -169,19 +170,29 @@ public class Peli extends JFrame {
 				
 				klikkaus1 = null;
 				klikkaus2 = null;
+				
+				TarkistaVoitto();
 			}
 			else{
 				piste = piste -1;
 				lbPisteet.setText("Pisteet: " + piste);
 				
-				viive = new Viive(2);
-				
+				viive = new Viive(2);			
+			}	
+		}
+		public void TarkistaVoitto(){
 			
-				
-				
-				
+			int tyhja = 0;
+			
+			for (int i = 0; i < 36; i++){
+				if(kortit.get(i).getIcon() == null){
+					tyhja++;
+				}
 			}
 			
+			if (tyhja == 0){
+				Voitto();
+			}
 		}
 		
 		public void Piilota(){
@@ -195,10 +206,6 @@ public class Peli extends JFrame {
 					 klikkaus2 = null;
 				}
 			}
-			
-		}
-		
-		public void Voitto(){
 			
 		}
 		
@@ -222,7 +229,13 @@ public class Peli extends JFrame {
 					}
 			}
 		}
+		
 	}
+		public void Voitto(){
+			String nimi = (String) JOptionPane.showInputDialog(null, "Sinä Voitit! \n Sait "
+					+ piste + " pistettä.\nAnna nimesi", "Peli päättyi",
+					JOptionPane.QUESTION_MESSAGE, null, null, "");
+		}
 	
 }
 
