@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,6 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import muisti.Peli.Press.Viive;
 
 
 public class Peli extends JFrame {
@@ -40,6 +43,8 @@ public class Peli extends JFrame {
 	
 	int kortti1, kortti2;
 	JButton klikkaus1, klikkaus2;
+	
+	private Viive viive = null;
 	
 	public Peli(){
 		//luodaan ikkuna ja asetellaan buttonit listaan
@@ -124,6 +129,9 @@ public class Peli extends JFrame {
 							 kortit.get(i).setIcon(kuvat.get(i));
 						}
 					}
+					else if (klikkaus1 != null && klikkaus2 != null){
+						viive.LopetaViive();
+					}
 						
 				}
 				else if(e.getSource().equals(btExit)){
@@ -132,7 +140,7 @@ public class Peli extends JFrame {
 					
 				}
 				else if(e.getSource().equals(btUusiPeli)){
-					System.exit(0);
+					Reset();
 				}
 				
 			}
@@ -141,6 +149,17 @@ public class Peli extends JFrame {
 			}
 			
 		   
+		}
+		
+		public void Reset(){
+			for (int i = 0; i < 36; i++){
+				kortit.get(i).setIcon(null);
+			}
+			Collections.shuffle(kuvat);
+			klikkaus1 = null;
+			klikkaus2 = null;
+			piste = 0;
+			lbPisteet.setText("Pisteet: " + piste);
 		}
 		
 		public void TarkistaKuvat(){
@@ -155,36 +174,56 @@ public class Peli extends JFrame {
 				piste = piste -1;
 				lbPisteet.setText("Pisteet: " + piste);
 				
-				klikkaus1 = null;
-				klikkaus2 = null;
+				viive = new Viive(2);
 				
-				Viive viive = new Viive(1);
+			
+				
+				
+				
 			}
 			
 		}
 		
-	}
-	public class Viive {
-		Timer aika;
-
-		public Viive(int sekunnit) {
-			aika = new Timer();
-			aika.schedule(new RemindTask(), sekunnit * 1000);
-		}
-			
-			public void cancelTimer() {
-				aika.cancel();
-				//piilotaKortit();
-			}
-
-			class RemindTask extends TimerTask {
-				public void run() {
-					aika.cancel();
-					
-					//piilotaKortit();
+		public void Piilota(){
+			for (int i = 0; i < 36; i ++){
+				if(kortit.get(i).equals(klikkaus1)){
+					 kortit.get(i).setIcon(null);
+					 klikkaus1 = null;
 				}
+				else if(kortit.get(i).equals(klikkaus2)){
+					 kortit.get(i).setIcon(null);
+					 klikkaus2 = null;
+				}
+			}
+			
+		}
+		
+		public void Voitto(){
+			
+		}
+		
+		public class Viive {
+			Timer aika;
+
+			public Viive(int sekunnit) {
+				aika = new Timer();
+				aika.schedule(new RemindTask(), sekunnit * 1000);
+			}
+				
+				public void LopetaViive() {
+					aika.cancel();
+					Piilota();
+				}
+
+				class RemindTask extends TimerTask {
+					public void run() {
+						aika.cancel();
+						Piilota();
+					}
+			}
 		}
 	}
+	
 }
 
 
