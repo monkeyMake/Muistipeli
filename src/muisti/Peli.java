@@ -230,12 +230,20 @@ public class Peli extends JFrame {
 			}
 		}
 		
-	}
+	
 		public void Voitto(){
-			String nimi = (String) JOptionPane.showInputDialog(null, "Sin‰ Voitit! \n Sait "
-					+ piste + " pistett‰.\nAnna nimesi", "Peli p‰‰ttyi",
-					JOptionPane.QUESTION_MESSAGE, null, null, "");
+			
+			int voitto = JOptionPane.showOptionDialog(null, "Voitit Pelin!\nSait "
+					+ piste + " pistett‰.\nAloitetaanko uusi peli?", "Game Over", JOptionPane.YES_NO_OPTION, 
+				      JOptionPane.QUESTION_MESSAGE, 
+				      null, null, null);
+			
+				if(voitto == JOptionPane.YES_OPTION){
+					Reset();
+				}
 		}
+
+	}
 	
 }
 
